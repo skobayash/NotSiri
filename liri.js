@@ -43,6 +43,8 @@ function spotifyThis () {
       return console.log("nope")
     }
 
+// if no song is provided then your program will default to "The Sign" by Ace of Base.
+
     for (var i = 0; i < data.tracks.items.length; i++){
       console.log("Artist: " + data.tracks.items[i].artists[0].name)
       console.log("Song: " + data.tracks.items[i].name)
@@ -57,6 +59,7 @@ function spotifyThis () {
 
 
 // 2. OMDB API
+// If the user doesn't type a movie in, the program will output data for the movie 'Mr. Nobody.'
 function omdbThis() {
   var queryUrl = "http://www.omdbapi.com/?t=" + query + "&y=&plot=short&apikey=" + process.env.OMDB_KEY;
 
@@ -74,20 +77,21 @@ function omdbThis() {
   });
 }
 
-// 997227706038145030
-
+// TWITTER
 function tweetThis () {
-  var client = new Twitter({
-    consumer_key: process.env.TWITTER_CONSUMER_KEY,
-    consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
-    access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,
-    access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
-  });
-  
-  var params = {screen_name: 'nodejs'};
-  client.get('statuses/user_timeline', params, function(error, tweets, response) {
-    if (!error) {
-      console.log(tweets.lists);
-    }
-  });
-}
+    var client = new Twitter({
+      consumer_key: process.env.TWITTER_CONSUMER_KEY,
+      consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
+      access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,
+      access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
+    });
+    
+    var params = {user_id: '997227706038145030'};
+    client.get('statuses/user_timeline', params, function(error, tweets, response) {
+      if (!error) {
+        for (var i = 0; i < tweets.length; i++) {
+            console.log(tweets[i].text);
+        }
+      }
+    });
+  }
