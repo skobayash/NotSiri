@@ -100,7 +100,7 @@ function spotifyThis () {
 function omdbThis () {
 
     if (!q) {    // Return error
-        q = "Mr.+Nobody";
+        q = "A+Quiet+Place";
     }
 
     // Constructing query
