@@ -148,16 +148,19 @@ function tweetThis () {
       access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
     });
     
-    var params = {user_id: '997227706038145030'};
+    var params = {user_id: '997227706038145030'}; 
     client.get('statuses/user_timeline', params, function(error, tweets, response) {
      
-        // log tweets
+
+        // Log Tweets
         if (!error) {
             for (var i = 0; i < tweets.length; i++) {
-                console.log(tweets[i].text);
-
+                var dateRaw = tweets[i].created_at.split(" ")
+                var dateAbbrev = dateRaw[0] + " " + dateRaw[1] + " " + dateRaw[2] + " " + dateRaw[5] + " at " + dateRaw[3];
+                console.log(tweets[i].text + "\n Created: " + dateAbbrev + "\n");
+                
                 // Data to append to log.txt file
-                logData = tweets[i].text + "\n"; 
+                logData = tweets[i].text + "\n Created: " + dateAbbrev + "\n"; 
 
                 // Append logData
                 writeToLog();

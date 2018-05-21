@@ -43,7 +43,8 @@ Running the app
 To use this app run one of the following commands:
 
 * `node liri.js my-tweets`
-	- This will show the last 20 tweets and when they were created at in your terminal/bash window.
+	- This will show @Finkus McHoagy's last 20 tweets and when they were created at in your terminal/bash window.
+	- These happen to be a list of some of the best NPR host/reporter names.
 
 * `node liri.js spotify-this-song "<name of song>"`
 	- This will show 20 results related to your requested song in your terminal/bash window. Each result will display the song's name, artist(s), album, and a preview link to the song on Spotify.
