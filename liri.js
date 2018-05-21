@@ -6,11 +6,20 @@ var fs = require("fs")
 var keys = require('./keys.js');
 var Twitter = require('twitter');
 var Spotify = require('node-spotify-api');
+const omdb = require('omdbapi')
 
 // GLOBAL VARIABLES
 var req = process.argv[2];
-var q = process.argv[3]
-// var query = q.split(' ').join('+');
+
+var q = "";
+var movieq = "";
+
+for (i = 3; i < process.argv.length; i++) {
+	q += (" " + process.argv[i]);
+}
+
+
+
 
 
 /* SWITCH STATEMENT */
@@ -31,17 +40,22 @@ switch (req) {
 
 // 1. SPOTIFY API
 function spotifyThis () { 
-  var spotify = new Spotify({
-    id: process.env.SPOTIFY_ID,
-    secret: process.env.SPOTIFY_SECRET
-  });
 
-  spotify.search({ type: 'track', query: q }, function(err, data) {
-    if (err) {
-      return console.log('Error occurred: ' + err);
-    } else if (!q) {
-      return console.log("nope")
+    if (!q) {
+        q = "The Sign Ace of Base";
     }
+
+    var spotify = new Spotify({
+        id: process.env.SPOTIFY_ID,
+        secret: process.env.SPOTIFY_SECRET
+    });
+
+    spotify.search({ type: 'track', query: q }, function(err, data) {
+        if (err) {
+        return console.log('Error occurred: ' + err);
+        } else {
+
+    
 
 // if no song is provided then your program will default to "The Sign" by Ace of Base.
 
@@ -50,34 +64,42 @@ function spotifyThis () {
       console.log("Song: " + data.tracks.items[i].name)
       console.log("Album: " + data.tracks.items[i].album.name)
       console.log("Listen on Spotify: " + data.tracks.items[i].external_urls.spotify)
-      console.log("----------------------------------------")
-    
-  }
+      console.log("---")
+    }
+}
   });
 }
 
 
 
 // 2. OMDB API
-// If the user doesn't type a movie in, the program will output data for the movie 'Mr. Nobody.'
-function omdbThis() {
-  var queryUrl = "http://www.omdbapi.com/?t=" + query + "&y=&plot=short&apikey=" + process.env.OMDB_KEY;
+function omdbThis () {
 
-  request(queryUrl, function(error, response, body) {
-    if(!error && response.statusCode === 200) {
-      console.log("Title: " + JSON.parse(body).Title);
-      console.log("Release Year: " + JSON.parse(body).Year);
-      console.log("IMDb Rating: " + JSON.parse(body).imdbRating);
-      console.log("Rotten Tomatoes Rating: " + JSON.parse(body).Ratings[1].Value);
-      console.log("Country: " + JSON.parse(body).Country);
-      console.log("Actors: " + JSON.parse(body).Actors);
-      console.log("Plot Summary: " + JSON.parse(body).Plot);
-      console.log("----------------------------------------")
+    if (!q) {
+        q = "Mr.+Nobody";
     }
-  });
-}
 
-// TWITTER
+    var queryUrl = "http://www.omdbapi.com/?t=" + q + "&y=&tomatoes=true&plot=short&apikey=" + process.env.OMDB_KEY;
+
+    request(queryUrl, function(error, response, body) {
+        if (!error && response.statusCode === 200) {
+                console.log("Title: " + JSON.parse(body).Title);
+                console.log("Release Year: " + JSON.parse(body).Year);
+                console.log("IMDb Rating: " + JSON.parse(body).imdbRating);
+                console.log("Rotten Tomatoes Rating: " + JSON.parse(body).Ratings[1].Value);
+                console.log("Country: " + JSON.parse(body).Country);
+                console.log("Actors: " + JSON.parse(body).Actors);
+                console.log("Plot Summary: " + JSON.parse(body).Plot);
+                console.log("-------------------------------------------------")
+            
+        }
+    });
+};
+
+
+
+
+// 3. TWITTER
 function tweetThis () {
     var client = new Twitter({
       consumer_key: process.env.TWITTER_CONSUMER_KEY,
@@ -94,4 +116,5 @@ function tweetThis () {
         }
       }
     });
-  }
+    console.log("-------------------------------------------------")
+}

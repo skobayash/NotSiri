@@ -20,6 +20,8 @@
     "dotenv": "^5.0.1",
     "fs": "0.0.1-security",
     "node-spotify-api": "^1.0.7",
+    "omdb": "^0.8.0",
+    "omdbapi": "^2.0.1",
     "twitter": "^1.7.1"
   }
 }
