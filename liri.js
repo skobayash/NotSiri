@@ -10,7 +10,7 @@ const omdb = require('omdbapi')
 
 // GLOBAL VARIABLES
 var req = process.argv[2];
-
+var logData;
 var q = "";
 var movieq = "";
 
@@ -33,12 +33,16 @@ switch (req) {
     case "my-tweets":
         tweetThis();
         break;
+    case "do-what-it-says":
+        doThis();
+        break;
 }
 
 
 /* MAIN COMPONENTS */
 
 // 1. SPOTIFY API
+
 function spotifyThis () { 
 
     if (!q) {
@@ -52,22 +56,32 @@ function spotifyThis () {
 
     spotify.search({ type: 'track', query: q }, function(err, data) {
         if (err) {
-        return console.log('Error occurred: ' + err);
+            return console.log('Error occurred: ' + err);
         } else {
+            for (var i = 0; i < data.tracks.items.length; i++){
+            console.log("Artist: " + data.tracks.items[i].artists[0].name)
+            console.log("Song: " + data.tracks.items[i].name)
+            console.log("Album: " + data.tracks.items[i].album.name)
+            console.log("Listen on Spotify: " + data.tracks.items[i].external_urls.spotify)
+            console.log("---")
 
-    
+            logData = "Artist: " + data.tracks.items[i].artists[0].name + "\n" 
+                    + "Song: " + data.tracks.items[i].name + "\n" 
+                    + "Album: " + data.tracks.items[i].album.name + "\n" 
+                    + "Listen on Spotify: " + data.tracks.items[i].external_urls.spotify + "\n"
+                    + "---" + "\n";
+           
+            fs.appendFile("log.txt", logData, function(err) {
+                if (err) {
+                    return console.log(err);
+                }
+            });
 
-// if no song is provided then your program will default to "The Sign" by Ace of Base.
 
-    for (var i = 0; i < data.tracks.items.length; i++){
-      console.log("Artist: " + data.tracks.items[i].artists[0].name)
-      console.log("Song: " + data.tracks.items[i].name)
-      console.log("Album: " + data.tracks.items[i].album.name)
-      console.log("Listen on Spotify: " + data.tracks.items[i].external_urls.spotify)
-      console.log("---")
-    }
-}
-  });
+            }
+        }
+    });
+
 }
 
 
@@ -83,15 +97,29 @@ function omdbThis () {
 
     request(queryUrl, function(error, response, body) {
         if (!error && response.statusCode === 200) {
-                console.log("Title: " + JSON.parse(body).Title);
-                console.log("Release Year: " + JSON.parse(body).Year);
-                console.log("IMDb Rating: " + JSON.parse(body).imdbRating);
-                console.log("Rotten Tomatoes Rating: " + JSON.parse(body).Ratings[1].Value);
-                console.log("Country: " + JSON.parse(body).Country);
-                console.log("Actors: " + JSON.parse(body).Actors);
-                console.log("Plot Summary: " + JSON.parse(body).Plot);
-                console.log("-------------------------------------------------")
-            
+            console.log("Title: " + JSON.parse(body).Title);
+            console.log("Release Year: " + JSON.parse(body).Year);
+            console.log("IMDb Rating: " + JSON.parse(body).imdbRating);
+            console.log("Rotten Tomatoes Rating: " + JSON.parse(body).Ratings[1].Value);
+            console.log("Country: " + JSON.parse(body).Country);
+            console.log("Actors: " + JSON.parse(body).Actors);
+            console.log("Plot Summary: " + JSON.parse(body).Plot);
+            console.log("-------------------------------------------------");
+        
+            logData = "Title: " + JSON.parse(body).Title + "\n"
+            + "Release Year: " + JSON.parse(body).Year + "\n" 
+            + "IMDb Rating: " + JSON.parse(body).imdbRating  + "\n" 
+            + "Rotten Tomatoes Rating: " + JSON.parse(body).Ratings[1].Value + "\n"
+            + "Country: " + JSON.parse(body).Country + "\n" 
+            + "Actors: " + JSON.parse(body).Actors  + "\n" 
+            + "Plot Summary: " + JSON.parse(body).Plot + "\n" 
+            + "-------------------------------------------------" + "\n";
+
+            fs.appendFile("log.txt", logData, function(err) {
+                if (err) {
+                    return console.log(err);
+                }
+            });
         }
     });
 };
@@ -113,8 +141,43 @@ function tweetThis () {
       if (!error) {
         for (var i = 0; i < tweets.length; i++) {
             console.log(tweets[i].text);
+
+            logData = tweets[i].text + "\n";
+
+            fs.appendFile("log.txt", logData, function(err) {
+                if (err) {
+                    return console.log(err);
+                }
+            });
+
+
         }
       }
     });
     console.log("-------------------------------------------------")
+}
+
+// 4. Do What It Says
+function doThis () {
+    fs.readFile("random.txt", "utf8", function(err, data) {
+        if (err) {
+            return console.log(err);
+        }
+        
+        var output = data.split(",");
+        q = output[1];
+        req = output[0];
+        
+        switch (req) {
+            case "spotify-this-song":
+                spotifyThis();
+                break;
+            case "movie-this":
+                omdbThis();
+                break;
+            case "my-tweets":
+                tweetThis();
+                break;
+        }
+    })
 }
