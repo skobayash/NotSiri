@@ -1,7 +1,7 @@
 # NotSiri
 A node.js app that is not Siri
 
-Overview
+## Overview
 This project is a command-line node.js app that takes in parameters and returns data from various API's.
 
 NotSiri is a node.js app that, when given various commands, will return the results of an npm api request.
@@ -13,10 +13,10 @@ NotSiri is a node.js app that, when given various commands, will return the resu
 
 
 
-Running the App
+## Running the App
 The App has 4 main functions. It can return your most recent 20 tweets, log essential details about different Spotify songs, return details about movies, and execute any of the before-mentioned functions by reading input from a text file.
 
-Requirements
+## Requirements
 To run this project, you will need:
 
 1. To initialize npm to create a package.json file
@@ -29,17 +29,17 @@ To run this project, you will need:
 	
 3. A .env file that contains the following:
 
-	# Spotify API keys
+	### Spotify API keys
 	- SPOTIFY_ID=your-spotify-id
 	- SPOTIFY_SECRET=your-spotify-secret
 
-	# Twitter API keys
+	### Twitter API keys
 	- TWITTER_CONSUMER_KEY=your-twitter-consumer-key
 	- TWITTER_CONSUMER_SECRET=your-twitter-consumer-secret
 	- TWITTER_ACCESS_TOKEN_KEY=your-access-token-key
 	- TWITTER_ACCESS_TOKEN_SECRET=your-twitter-access-token-secret
 
-Running the app
+## Running the app
 To use this app run one of the following commands:
 
 * `node liri.js my-tweets`
